@@ -20,8 +20,8 @@ char cmd_buffer[CMD_BUFFER_LEN];
 
 
 // PD params
-float k_p = 0.1;
-float k_d = 0;
+double k_p = 0.15;
+double k_d = 0.05;
 int sensDiffPrev = 0;
 int tPrevious = 0;
 int baseSpeed = 30;
@@ -39,31 +39,42 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available()) {
-    char ch = Serial.read();
-    
-    Serial.println(cmd_buffer);
-    
-    if (ch == '\r') {
-      Serial.println("New line detected");
-      cmd_buffer[cmd_buffer_pos] = '\0';
-      parseCommandBuffer();
-      cmd_buffer_pos = 0;
-    } else if (cmd_buffer_pos == CMD_BUFFER_LEN - 1) {
-      cmd_buffer_pos = 0;
-      cmd_buffer[cmd_buffer_pos] = ch;
-      cmd_buffer_pos++;
-    } else {
-      cmd_buffer[cmd_buffer_pos] = ch;
-      cmd_buffer_pos++;
-    }
-  }
 
+  detectSerial();
+  
   //bangBang();
   pdControl();
   
   motorWrite();
-  delay(50);
+  delay(20);
+}
+
+
+
+void detectSerial() {
+  if (Serial.available()) {
+  char ch = Serial.read();
+  
+  Serial.println(cmd_buffer);
+  
+  if (ch == '\r') {
+    Serial.println("New line detected");
+    cmd_buffer[cmd_buffer_pos] = '\0';
+    parseCommandBuffer();
+    cmd_buffer_pos = 0;
+    memset(cmd_buffer, 0, sizeof(cmd_buffer));
+  } else if (cmd_buffer_pos == CMD_BUFFER_LEN - 1) {
+    cmd_buffer_pos = 0;
+    memset(cmd_buffer, 0, sizeof(cmd_buffer));
+    cmd_buffer[cmd_buffer_pos] = ch;
+    cmd_buffer_pos++;
+  } else {
+    cmd_buffer[cmd_buffer_pos] = ch;
+    cmd_buffer_pos++;
+  }
+  }
+  
+  
 }
 
 void parseCommandBuffer() {
@@ -82,6 +93,27 @@ void parseCommandBuffer() {
     motorWrite();
     
     Serial.print("Setting right motor value: ");
+    Serial.println(val);
+  }
+  else if (strncmp(cmd_buffer, "KP", 2) == 0) {
+    double val = atof(cmd_buffer + 2);
+    k_p = val;
+    
+    Serial.print("Setting KP value: ");
+    Serial.println(val);
+  }
+    else if (strncmp(cmd_buffer, "KD", 2) == 0) {
+    double val = atof(cmd_buffer + 2);
+    k_d = val;
+    
+    Serial.print("Setting KD value: ");
+    Serial.println(val);
+  }
+  else if (strncmp(cmd_buffer, "BS", 2) == 0) {
+    int val = atoi(cmd_buffer + 2);
+    baseSpeed = val;
+    
+    Serial.print("Setting base_speed value: ");
     Serial.println(val);
   }
 }
@@ -126,11 +158,11 @@ void bangBang() {
 void pdControl() {
   int leftSensVal = analogRead(leftSens);
   int rightSensVal = analogRead(rightSens);
-  int sensDiff = leftSensVal - rightSensVal;
+  int sensDiff = rightSensVal - leftSensVal;
   int tElapsed = millis() - tPrevious;
   int motorDiff = k_p * sensDiff + k_d * (sensDiff-sensDiffPrev)/tElapsed;
 
-  leftMotorVal = -(baseSpeed + motorDiff);
-  rightMotorVal = baseSpeed - motorDiff;
+  leftMotorVal = -max(min(baseSpeed + motorDiff, 128),-128);
+  rightMotorVal = max(min(baseSpeed - motorDiff, 128), -128);
   sensDiffPrev = millis();
   }
