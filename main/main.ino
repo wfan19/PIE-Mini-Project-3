@@ -26,7 +26,8 @@ int sensDiffPrev = 0;
 int tPrevious = 0;
 int baseSpeed = 30;
 
-bool print_csv = false;
+bool printCSV = false;
+int csvTime = 0;
 
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps
@@ -49,14 +50,16 @@ void loop() {
   
   motorWrite();
 
-  if (print_csv){
+  if (printCSV){
     Serial.print(analogRead(leftSens));
     Serial.print(",");
     Serial.print(analogRead(rightSens));
     Serial.print(",");
     Serial.print(leftMotorVal);
     Serial.print(",");
-    Serial.println(rightMotorVal);
+    Serial.print(rightMotorVal);
+    Serial.print(",");
+    Serial.print((millis() - csvTime))
     delay(20);
   }
 }
@@ -131,6 +134,7 @@ void parseCommandBuffer() {
     print_csv = true;
     
     Serial.println("Starting CSV");
+    csvTime = millis();
   }
 }
 
