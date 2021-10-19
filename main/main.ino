@@ -21,10 +21,12 @@ char cmd_buffer[CMD_BUFFER_LEN];
 
 // PD params
 double k_p = 0.15;
-double k_d = 0.05;
+double k_d = 0.02;
 int sensDiffPrev = 0;
 int tPrevious = 0;
 int baseSpeed = 30;
+
+bool print_csv = false;
 
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps
@@ -46,7 +48,17 @@ void loop() {
   pdControl();
   
   motorWrite();
-  delay(20);
+
+  if (print_csv){
+    Serial.print(analogRead(leftSens));
+    Serial.print(",");
+    Serial.print(analogRead(rightSens));
+    Serial.print(",");
+    Serial.print(leftMotorVal);
+    Serial.print(",");
+    Serial.println(rightMotorVal);
+    delay(20);
+  }
 }
 
 
@@ -55,7 +67,6 @@ void detectSerial() {
   if (Serial.available()) {
   char ch = Serial.read();
   
-  Serial.println(cmd_buffer);
   
   if (ch == '\r') {
     Serial.println("New line detected");
@@ -115,6 +126,11 @@ void parseCommandBuffer() {
     
     Serial.print("Setting base_speed value: ");
     Serial.println(val);
+  }
+  else if (strncmp(cmd_buffer, "DA", 2) == 0) {
+    print_csv = true;
+    
+    Serial.println("Starting CSV");
   }
 }
 
