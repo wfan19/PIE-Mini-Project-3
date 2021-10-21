@@ -226,17 +226,6 @@ Wire Wire Line
 	3550 3250 3550 3000
 Wire Wire Line
 	3200 3000 3550 3000
-$Comp
-L block_diagram_parts:MotorShield U?
-U 1 1 6172772E
-P 4400 3650
-F 0 "U?" H 4400 3800 50  0000 C CNN
-F 1 "MotorShield" H 4400 3500 50  0000 C CNN
-F 2 "" H 4400 3650 50  0001 C CNN
-F 3 "" H 4400 3650 50  0001 C CNN
-	1    4400 3650
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4100 3850 4000 3850
 Wire Wire Line
@@ -263,17 +252,6 @@ F 2 "" H 5450 3710 50  0001 C CNN
 F 3 "~" H 5450 3710 50  0001 C CNN
 	1    5450 3800
 	1    0    0    -1  
-$EndComp
-$Comp
-L power:+5V #PWR?
-U 1 1 6172CB26
-P 4000 3950
-F 0 "#PWR?" H 4000 3800 50  0001 C CNN
-F 1 "+5V" V 4015 4078 50  0000 L CNN
-F 2 "" H 4000 3950 50  0001 C CNN
-F 3 "" H 4000 3950 50  0001 C CNN
-	1    4000 3950
-	0    -1   -1   0   
 $EndComp
 Wire Wire Line
 	4000 3950 4100 3950
@@ -349,4 +327,30 @@ Text Notes 5250 4450 0    50   ~ 0
 Left Wheel
 Text Notes 5950 4450 0    50   ~ 0
 Right Wheel
+$Comp
+L block_diagram_parts:MotorShield U?
+U 1 1 6172772E
+P 4400 3650
+F 0 "U?" H 4400 3800 50  0000 C CNN
+F 1 "MotorShield" H 4400 3500 50  0000 C CNN
+F 2 "" H 4400 3650 50  0001 C CNN
+F 3 "" H 4400 3650 50  0001 C CNN
+	1    4400 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 3900 4000 3900
+Wire Wire Line
+	4000 3900 4000 3950
+$Comp
+L power:+12V #PWR?
+U 1 1 61741886
+P 3700 3900
+F 0 "#PWR?" H 3700 3750 50  0001 C CNN
+F 1 "+12V" V 3715 4028 50  0000 L CNN
+F 2 "" H 3700 3900 50  0001 C CNN
+F 3 "" H 3700 3900 50  0001 C CNN
+	1    3700 3900
+	0    -1   -1   0   
+$EndComp
 $EndSCHEMATC
