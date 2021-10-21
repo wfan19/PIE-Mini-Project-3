@@ -115,6 +115,47 @@ X A0 9 500 0 100 L 50 50 1 1 B
 ENDDRAW
 ENDDEF
 #
+# Motor_Motor_DC
+#
+DEF Motor_Motor_DC M 0 0 Y Y 1 F N
+F0 "M" 100 100 50 H V L CNN
+F1 "Motor_Motor_DC" 100 -200 50 H V L TNN
+F2 "" 0 -90 50 H I C CNN
+F3 "" 0 -90 50 H I C CNN
+$FPLIST
+ PinHeader*P2.54mm*
+ TerminalBlock*
+$ENDFPLIST
+DRAW
+C 0 -60 128 0 1 10 N
+P 5 0 0 0 -50 -130 -50 20 0 -80 50 20 50 -130 N
+P 2 0 1 0 0 -300 0 -280 N
+P 2 0 1 0 0 -188 0 -204 N
+P 2 0 1 0 0 68 0 82 N
+P 2 0 1 0 0 80 0 100 N
+X + 1 0 200 100 D 50 50 1 1 P
+X - 2 0 -300 100 U 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
+# block_diagram_parts_MotorShield
+#
+DEF block_diagram_parts_MotorShield U 0 40 Y Y 1 F N
+F0 "U" 0 250 50 H V C CNN
+F1 "block_diagram_parts_MotorShield" 0 150 50 H V C CNN
+F2 "" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+S -300 100 300 -450 0 1 0 N
+X SDA 1 -300 -50 100 L 50 50 1 1 I
+X SCL 2 -300 -200 100 L 50 50 1 1 U
+X GND ~ -300 -400 100 L 50 50 1 1 P
+X Motor_1 ~ 300 -50 100 R 50 50 1 1 O
+X Motor_2 ~ 300 -200 100 R 50 50 1 1 O
+X ~ ~ -300 -300 100 L 50 50 1 1 W
+ENDDRAW
+ENDDEF
+#
 # power_+5V
 #
 DEF power_+5V #PWR 0 0 Y Y 1 F P
